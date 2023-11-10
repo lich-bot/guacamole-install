@@ -1,8 +1,9 @@
 # 
-<h1 align="center">:avocado: Guacamole Installer (& full appliance builder)</h1>
-<p align="center">
-  <img src="https://img.shields.io/badge/GitHub-GPL--3.0-informational.svg" alt="License">
-</p>
+<h1 align="center">:avocado: Guacamole Installer (& full appliance builder)</h1> 
+ <p align="center">
+<a href="https://www.paypal.com/donate/?business=PSZ878JBJDMB8&amount=10&no_recurring=0&item_name=Thankyou+for+your+support+in+maintaining+this+project&currency_code=AUD">
+  <img src="https://github.com/itiligent/Guacamole-Install/raw/main/.github/ISSUE_TEMPLATE/paypal-donate-button.png" width="125" />
+</a>
 
 This suite of build and management scripts makes setting and operating Guacamole a breeze. Its got installer support for TLS reverse proxy (self sign or LetsEncrypt), Active Directory integration, multi-factor authentication, Quick Connect & History Recording Storage UI enhancements, a custom UI theme creation template with dark mode as default, auto database backup, O365 email alerts, internal daemon security hardening options and even a fail2ban policy for defence against brute force attacks. There's also code in here to get you up and running with an enterprise deployment approach very similar to [Amazon's Guacmole Bastion Cluster](http://netcubed-ami.s3-website-us-east-1.amazonaws.com/guaws/v2.3.1/cluster/), if that's your thing!
 
