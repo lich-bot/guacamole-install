@@ -761,7 +761,7 @@ export LOCAL_DOMAIN=$LOCAL_DOMAIN
 export DOMAIN_SUFFIX=$DOMAIN_SUFFIX
 
 # Run the Guacamole install script
-sudo -E ./2-install-guacamole.sh # Using -E to keep all exported variables and outputs within the current shell
+sudo ./2-install-guacamole.sh # Using -E to keep all exported variables and outputs within the current shell
 if [[ $? -ne 0 ]]; then
     echo -e "${LRED}2-install-guacamole.sh FAILED. See ${INSTALL_LOG}${GREY}" 1>&2
     exit 1
