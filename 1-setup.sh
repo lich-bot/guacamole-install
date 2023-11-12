@@ -39,11 +39,29 @@ NC='\033[0m' #No Colour
 # Check if running inside a Docker container
 if [ -f "/.dockerenv" ] || grep -qE "^/docker/" "/proc/1/cgroup"; then
     echo "Docker install detected."
-# Dont prompt for sudo
+#Skip sudo if running Docker so the installer works on both Docker and native OS builds.
 sudo() {
-  [[ "${EUID}" == 0 ]] || set -- command sudo "${@}"
-  "${@}"
+  if [[ "${EUID}" == 0 ]]; then
+    # Running as root, execute the command directly
+    "${@}"
+  else
+    # Not running as root, use sudo
+    if [[ "${1}" == "-E" ]]; then
+      shift  # Remove the -E option
+      set -- command sudo -E "${@}"
+    else
+      set -- command sudo "${@}"
+    fi
+
+    "${@}"
+  fi
 }
+
+
+#sudo() {
+#  [[ "${EUID}" == 0 ]] || set -- command sudo "${@}"
+#  "${@}"
+#}
 
 else
 
