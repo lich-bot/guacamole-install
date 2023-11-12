@@ -14,8 +14,8 @@ This suite of build and management scripts makes setting and operating Guacamole
 ```shell
 wget https://raw.githubusercontent.com/itiligent/Guacamole-Install/main/1-setup.sh && chmod +x 1-setup.sh && ./1-setup.sh
 ```
-## Docker Image Creation
-For customised & branded Docker builds, unattended installation options are available. Read on...
+## Custom Docker & Guacamole Containers 
+For highly customised & branded Docker builds, a Docker auto instller option is currently in development...
 
 ## Prerequisites 
 
