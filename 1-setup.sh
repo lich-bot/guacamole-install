@@ -36,6 +36,17 @@ LGREEN='\033[0;92m'
 LYELLOW='\033[0;93m'
 NC='\033[0m' #No Colour
 
+# Check if running inside a Docker container
+if [ -f "/.dockerenv" ] || grep -qE "^/docker/" "/proc/1/cgroup"; then
+    echo "Docker install detected."
+# Dont prompt for sudo
+sudo() {
+  [[ "${EUID}" == 0 ]] || set -- command sudo "${@}"
+  "${@}"
+}
+
+else
+
 # Make sure the user is NOT running this script as root
 if [[ $EUID -eq 0 ]]; then
     echo
@@ -65,6 +76,7 @@ if [[ "$(find . -maxdepth 1 \( -name 'guacamole-*' -o -name 'mysql-connector-j-*
     echo -e "${LRED}Possible previous install files detected in current build path. Please review and remove old guacamole install files before proceeding.${GREY}, exiting..." 1>&2
     echo
     exit 1
+fi
 fi
 
 #######################################################################################################################
