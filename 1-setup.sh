@@ -118,25 +118,25 @@ INSTALL_LOG="${DOWNLOAD_DIR}/guacamole_install.log"
 #######################################################################################################################
 # Silent setup options - true/false or specific values below prevents prompt at install. EDIT TO SUIT #################
 #######################################################################################################################
-SERVER_NAME=""                  # Server hostname
-LOCAL_DOMAIN=""                 # Local DNS namespace/domain suffix
-INSTALL_MYSQL=""                # Install MySQL locally (true/false)
-SECURE_MYSQL=""                 # Apply mysql secure configuration tool (true/false)
+SERVER_NAME="test"                  # Server hostname
+LOCAL_DOMAIN="lan"                 # Local DNS namespace/domain suffix
+INSTALL_MYSQL="true"                # Install MySQL locally (true/false)
+SECURE_MYSQL="true"                 # Apply mysql secure configuration tool (true/false)
 MYSQL_HOST=""                   # Blank or localhost for a local MySQL install, a specific IP for remote MySQL option.
 MYSQL_PORT=""                   # If blank default is 3306
 GUAC_DB=""                      # If blank default is guacamole_db
-GUAC_USER=""                    # If blank default is guacamole_user
-MYSQL_ROOT_PWD=""               # Requires an entry here or at script prompt.
-GUAC_PWD=""                     # Requires an entry here or at script prompt.
-DB_TZ=$(cat /etc/timezone)      # Leave blank for UTC, for local tz $(cat /etc/timezone)
-INSTALL_TOTP=""                 # Add TOTP MFA extension (true/false)
-INSTALL_DUO=""                  # Add DUO MFA extension (can't be installed simultaneously with TOTP, true/false)
-INSTALL_LDAP=""                 # Add Active Directory extension (true/false)
-INSTALL_QCONNECT=""             # Add Guacamole console quick connect feature (true/false)
-INSTALL_HISTREC=""              # Add Guacamole history recording storage feature (true/false)
-HISTREC_PATH=""                 # If blank sets Apache default /var/lib/guacamole/recordings
-GUAC_URL_REDIR=""               # Add auto redirect from http://xxx:8080 root to http://xxx:8080/guacamole)
-INSTALL_NGINX=""                # Install and configure Nginx and reverse proxy Guacamole (via http port 80 only, true/false)
+GUAC_USER="password"                    # If blank default is guacamole_user
+MYSQL_ROOT_PWD="password"               # Requires an entry here or at script prompt.
+GUAC_PWD="password"                     # Requires an entry here or at script prompt.
+DB_TZ=      # Leave blank for UTC, for local tz $(cat /etc/timezone)
+INSTALL_TOTP="false"                 # Add TOTP MFA extension (true/false)
+INSTALL_DUO="false"                  # Add DUO MFA extension (can't be installed simultaneously with TOTP, true/false)
+INSTALL_LDAP="false"                 # Add Active Directory extension (true/false)
+INSTALL_QCONNECT="false"             # Add Guacamole console quick connect feature (true/false)
+INSTALL_HISTREC="false"              # Add Guacamole history recording storage feature (true/false)
+HISTREC_PATH="true"                 # If blank sets Apache default /var/lib/guacamole/recordings
+GUAC_URL_REDIR="true"               # Add auto redirect from http://xxx:8080 root to http://xxx:8080/guacamole)
+INSTALL_NGINX="false"                # Install and configure Nginx and reverse proxy Guacamole (via http port 80 only, true/false)
 PROXY_SITE=""                   # Local DNS name for reverse proxy site and/or self signed TLS certificates
 SELF_SIGN=""                    # Add self signed TLS support to Nginx (Let's Encrypt not available with this option, true/false)
 RSA_KEYLENGTH="2048"            # Self signed RSA TLS key length. At least 2048, must not be blank.
@@ -152,7 +152,7 @@ LE_EMAIL=""                     # Webmaster/admin email for Lets Encrypt notific
 BACKUP_EMAIL=""                 # Email address for backup notifications
 BACKUP_RETENTION="30"           # How many days to keep SQL backups locally for
 RDP_SHARE_LABEL="RDP Share"     # Customise RDP shared drive name shown in Windows Explorer (e.g. RDP_SHARE_LABEL on RDP_SHARE_HOST)
-RDP_SHARE_HOST=""               # Customise RDP share name shown in Windows Explorer. (e.g. RDP_SHARE_LABEL on RDP_SHARE_HOST)
+RDP_SHARE_HOST="Docker"               # Customise RDP share name shown in Windows Explorer. (e.g. RDP_SHARE_LABEL on RDP_SHARE_HOST)
 RDP_PRINTER_LABEL="RDP Printer" # Customise RDP printer name shown in Windows
 
 #######################################################################################################################
@@ -788,20 +788,20 @@ rm cron_1
 
 # Install Nginx reverse proxy front end to Guacamole if option is selected
 if [[ "${INSTALL_NGINX}" = true ]]; then
-    sudo -E ./3-install-nginx.sh # Using -E to keep all exported variables and outputs within the current shell
+    sudo ./3-install-nginx.sh # Using -E to keep all exported variables and outputs within the current shell
     echo -e "${LGREEN}Nginx install complete\nhttp://${PROXY_SITE} - admin login: guacadmin pass: guacadmin\n${LYELLOW}***Be sure to change the password***${GREY}"
 fi
 
 # Apply self signed TLS certificates to Nginx reverse proxy if option is selected
 if [[ "${INSTALL_NGINX}" = true ]] && [[ "${SELF_SIGN}" = true ]] && [[ "${LETS_ENCRYPT}" != true ]]; then
     # Using -E to keep all exported variables and outputs within the current shell
-    sudo -E ./4a-install-tls-self-signed-nginx.sh ${PROXY_SITE} ${CERT_DAYS} ${DEFAULT_IP} | tee -a ${INSTALL_LOG} # Logged to capture client cert import instructions
+    sudo ./4a-install-tls-self-signed-nginx.sh ${PROXY_SITE} ${CERT_DAYS} ${DEFAULT_IP} | tee -a ${INSTALL_LOG} # Logged to capture client cert import instructions
     echo -e "${LGREEN}Self signed certificate configured for Nginx \n${LYELLOW}https:${LGREEN}//${PROXY_SITE}  - login user/pass: guacadmin/guacadmin\n${LYELLOW}***Be sure to change the password***${GREY}"
 fi
 
 # Apply Let's Encrypt TLS certificates to Nginx reverse proxy if option is selected
 if [[ "${INSTALL_NGINX}" = true ]] && [[ "${LETS_ENCRYPT}" = true ]] && [[ "${SELF_SIGN}" != true ]]; then
-    sudo -E ./4b-install-tls-letsencrypt-nginx.sh # Using -E to keep all exported variables and outputs within the current shell
+    sudo ./4b-install-tls-letsencrypt-nginx.sh # Using -E to keep all exported variables and outputs within the current shell
     echo -e "${LGREEN}Let's Encrypt TLS configured for Nginx \n${LYELLOW}https:${LGREEN}//${LE_DNS_NAME}  - login user/pass: guacadmin/guacadmin\n${LYELLOW}***Be sure to change the password***${GREY}"
 fi
 
